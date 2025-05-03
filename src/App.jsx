@@ -19,12 +19,11 @@ function App() {
         //   throw new Error("error")
         // }
         const data = await res.json();
-        if(data.error){
-          setError(data.error.message)
+        if (data.error) {
+          setError(data.error.message);
         }
         setWeatherData(data);
         setError(null);
-
       } catch (err) {
         console.log(err);
         setError(err.message);
@@ -32,7 +31,7 @@ function App() {
       }
     }
     getData();
-  }, []);
+  }, [city]);
 
   console.log(weatherData);
   return (
@@ -43,8 +42,13 @@ function App() {
           <div className="search-container">
             <input
               type="text"
+              value={city}
               placeholder="Enter city name"
               className="search-input"
+              onChange={(e) => {
+                const city = e.target.value;
+                setCity(city);
+              }}
             />
           </div>
         </div>
@@ -52,12 +56,16 @@ function App() {
           <h2>
             {weatherData?.location?.name}, {weatherData?.location?.country}
           </h2>
-          <img src="" alt="icon" className="weather-icon" />
-          <p className="temperature">11°C</p>
-          <p className="condition">rainy</p>
+          <img
+            src={weatherData?.current?.condition?.icon}
+            alt="icon"
+            className="weather-icon"
+          />
+          <p className="temperature">{weatherData?.current?.temp_c}°C</p>
+          <p className="condition">{weatherData?.current?.condition?.text}</p>
           <div className="weather-details">
-            <p>Humidity: 20%</p>
-            <p>Wind: 22 km/h</p>
+            <p>Humidity: {weatherData?.current?.humidity}%</p>
+            <p>Wind: {weatherData?.current?.wind_kph} km/h</p>
           </div>
         </div>
       </div>
